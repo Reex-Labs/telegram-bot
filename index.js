@@ -82,6 +82,7 @@ bot.on('text', async (ctx) => {
         ctx.reply(message)
     }
     else {
+        ctx.reply(text)
         ctx.reply(messages.NOT_ADDRESS)
     }
 })
@@ -110,7 +111,6 @@ process.once('SIGTERM', () => bot.stop('SIGTERM'))
 
 async function getReex(address) {
     const url = `${process.env.NODE_FAUCET_API}${address}/${process.env.NODE_FAUCET_TOKEN}`
-    console.log('url ', url)
 
     try {
         const response = await axios.get(url);

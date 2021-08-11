@@ -43,12 +43,6 @@ export function isUser(id) {
 
 // ToDo: дописать валидацию адреса
 export function isAddress(address) {
-    if (address.length !== 43) {
-        return false
-    }
-    if (address.slice(0, 4) !== 'reex') {
-        return false
-    }
-
-    return true
+    var regex = /^reex\w{39}$/;
+    return regex.test(address)
 }
