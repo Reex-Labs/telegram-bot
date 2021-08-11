@@ -46,7 +46,7 @@ export function isAddress(address) {
     if (address.length !== 45) {
         return false
     }
-    if (address.slice(0, 6) !== 'cosmos') {
+    if (address.slice(0, 6) !== 'reex') {
         return false
     }
 
