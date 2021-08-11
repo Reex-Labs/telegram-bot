@@ -43,7 +43,7 @@ export function isUser(id) {
 
 // ToDo: дописать валидацию адреса
 export function isAddress(address) {
-    if (address.length !== 45) {
+    if (address.length !== 43) {
         return false
     }
     if (address.slice(0, 4) !== 'reex') {
