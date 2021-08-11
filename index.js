@@ -64,6 +64,8 @@ bot.on('text', async (ctx) => {
     let message = ''
     const text = ctx.message.text
 
+    console.log('faucet to address', text)
+
     if (users.isAddress(text)) {
         if (users.isLocked(user.id)) {
             message = messages.TIMELEFT + users.getTimeLeft(user.id)
@@ -82,7 +84,7 @@ bot.on('text', async (ctx) => {
         ctx.reply(message)
     }
     else {
-        ctx.reply(text)
+        console.log('address invalid', text)
         ctx.reply(messages.NOT_ADDRESS)
     }
 })
