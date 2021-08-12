@@ -4,6 +4,7 @@ import dotenv from 'dotenv'
 
 import * as messages from './messages.js'
 import * as users from './users.js'
+import genAddress from './address.js'
 
 const evnStatus = dotenv.config()
 
@@ -45,7 +46,7 @@ bot.start(ctx => {
             ],
             [
                 Markup.button.callback('Баланс (скоро)', 'checkBalance'),
-                Markup.button.callback('Кошелек (скоро)', 'createWallet'),
+                Markup.button.callback('Создать кошелек', 'createWallet'),
             ],
             // [
             //     Markup.button.callback('Отправить (скоро)', 'createWallet'),
@@ -93,8 +94,9 @@ bot.action('checkBalance', (ctx) => {
     ctx.reply(messages.SOON)
 })
 
-bot.action('createWallet', (ctx) => {
-    ctx.reply(messages.SOON)
+bot.action('createWallet', async (ctx) => {
+    const { address, mnemonic } = await genAddress()
+    ctx.replyWithMarkdown(messages.YOUR_ADDRESS(address, mnemonic))
 })
 
 bot.action('faucetMessage', (ctx) => {
