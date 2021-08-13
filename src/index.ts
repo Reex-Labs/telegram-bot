@@ -38,14 +38,7 @@ const stage = new Scenes.Stage<Scenes.SceneContext>([start, getReexScene, create
 bot.use(stage.middleware())
 
 bot.start(ctx => {
-    const image = `iVBORw0KGgoAAAANSUhEUgA
-AAAoAAAAKCAYAAACNMs+9AAAABmJLR0QA/wD/AP+gvaeTAAAAB3RJ
-TUUH1ggDCwMADQ4NnwAAAFVJREFUGJWNkMEJADEIBEcbSDkXUnfSg
-nBVeZ8LSAjiwjyEQXSFEIcHGP9oAi+H0Bymgx9MhxbFdZE2a0s9kT
-Zdw01ZhhYkABSwgmf1Z6r1SNyfFf4BZ+ZUExcNUQUAAAAASUVORK5
-CYII=`
     ctx.reply(messages.WELCOME, mainKeyboard)
-    ctx.replyWithPhoto({ source: Buffer.from(image, 'base64') })
 })
 
 bot.hears(mainButtonText.getReex, (ctx: any) => {
