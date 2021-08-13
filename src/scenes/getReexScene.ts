@@ -5,6 +5,8 @@ import * as users from '../users.js'
 import { isValidAddress } from '../address.js'
 import { getReex } from '../api.js'
 
+console.log('')
+
 const { leave } = Scenes.Stage
 const getReexScene = new Scenes.BaseScene<Scenes.SceneContext>('getReexScene')
 

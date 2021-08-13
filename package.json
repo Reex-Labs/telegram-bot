@@ -4,10 +4,8 @@
   "description": "",
   "main": "dist/index.js",
   "scripts": {
-    "dev": "nodemon --watch ./src --exec 'node --loader ts-node/esm src/index.ts'",
-    "start1": "tsc --project . --outDir ./dist --onSuccess \"nodemon ./dist/index.js\"",
-    "start2": "nodemon --watch '*.ts' --exec tsc & node ./dist/index.js",
-    "start3": "nodemon src/index.ts",
+    "dev": "node dist/index.js",
+    "tsc": "tsc --project . --outDir ./dist",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
@@ -18,6 +16,7 @@
     "@cosmjs/proto-signing": "^0.25.6",
     "@cosmjs/stargate": "^0.25.6",
     "axios": "^0.21.1",
+    "nodejs-captcha": "0.0.6",
     "telegraf": "^4.4.1"
   },
   "devDependencies": {

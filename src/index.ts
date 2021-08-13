@@ -13,6 +13,7 @@ import getReexScene from './scenes/getReexScene.js'
 import createWalletScene from './scenes/createWalletScene.js'
 import getBalanceScene from './scenes/getBalanceScene.js'
 import transferScene from './scenes/transferScene.js'
+import { InputFile } from 'telegraf/typings/core/types/typegram'
 
 const evnStatus = dotenv.config()
 if (evnStatus.error) throw evnStatus.error
@@ -42,7 +43,14 @@ bot.use(session())
 bot.use(stage.middleware())
 
 bot.start(ctx => {
+    const image = `iVBORw0KGgoAAAANSUhEUgA
+AAAoAAAAKCAYAAACNMs+9AAAABmJLR0QA/wD/AP+gvaeTAAAAB3RJ
+TUUH1ggDCwMADQ4NnwAAAFVJREFUGJWNkMEJADEIBEcbSDkXUnfSg
+nBVeZ8LSAjiwjyEQXSFEIcHGP9oAi+H0Bymgx9MhxbFdZE2a0s9kT
+Zdw01ZhhYkABSwgmf1Z6r1SNyfFf4BZ+ZUExcNUQUAAAAASUVORK5
+CYII=`
     ctx.reply(messages.WELCOME, mainKeyboard)
+    ctx.replyWithPhoto({ source: Buffer.from(image, 'base64') })
 })
 
 bot.hears(mainButtonText.getReex, (ctx: any) => {
