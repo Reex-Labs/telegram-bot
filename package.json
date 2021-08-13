@@ -11,6 +11,9 @@
   "author": "",
   "license": "ISC",
   "type": "module",
+  "engines" : { 
+    "node" : ">=14.17.0" 
+  },
   "dependencies": {
     "@cosmjs/launchpad": "^0.25.6",
     "@cosmjs/proto-signing": "^0.25.6",
