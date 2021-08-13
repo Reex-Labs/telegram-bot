@@ -35,6 +35,8 @@ const { enter, leave } = Scenes.Stage
 const stage = new Scenes.Stage<Scenes.SceneContext>([start, getReexScene, createWalletScene, getBalanceScene, transferScene], {
   ttl: 10,
 })
+
+bot.use(session())
 bot.use(stage.middleware())
 
 bot.start(ctx => {
