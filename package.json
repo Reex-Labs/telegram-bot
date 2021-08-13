@@ -4,8 +4,9 @@
   "description": "",
   "main": "dist/index.js",
   "scripts": {
+    "watch": "nodemon src/index.ts --exec 'node --loader ts-node src/index.ts'",
     "dev": "node dist/index.js",
-    "tsc": "tsc --project . --outDir ./dist",
+    "tsc": "tsc",
     "start": "npm run tsc && npm run dev",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
