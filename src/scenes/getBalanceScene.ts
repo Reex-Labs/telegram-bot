@@ -18,10 +18,8 @@ getBalanceScene.leave(async (ctx) => {
 })
 getBalanceScene.hears(backButtonText, leave<Scenes.SceneContext>())
 getBalanceScene.on('message', async (ctx: any) => {
-    let address: string = ''
-    if (ctx.message) {
-        address = ctx.message.text ?? ''
-    }
+    let address = ctx.message.text
+
     if (!isValidAddress(address)) {
         ctx.reply(messages.NOT_ADDRESS)
         return
