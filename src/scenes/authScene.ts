@@ -3,6 +3,7 @@ import { backKeyboard, backButtonText, getMainKeyboard } from '../keyboards.js'
 import * as messages from '../messages.js'
 import { isValidMnemonic } from '../address.js'
 import { logout } from '../users.js'
+import { goMain } from '../utils.js'
 
 const { leave } = Scenes.Stage
 const authScene = new Scenes.BaseScene<Scenes.SceneContext>('authScene')
@@ -24,7 +25,6 @@ authScene.on('message', async (ctx: any) => {
 
             // ToDo: Удалить, если используется пароль
             ctx.session.state = true
-            await ctx.deleteMessage()
             ctx.replyWithMarkdown(messages.AUTH_SUCCESS, backKeyboard)
             
             // ctx.replyWithMarkdown('Теперь задайте какой-нибудь пароль. Это дополнительно защитит вас.', backKeyboard)
@@ -48,7 +48,7 @@ authScene.leave(async (ctx: any) => {
     if (!ctx.session.state) {
         logout(ctx)
     }
-    await ctx.reply(messages.WELCOME, getMainKeyboard(ctx))
+    await goMain(ctx)
 })
 
 export default authScene;

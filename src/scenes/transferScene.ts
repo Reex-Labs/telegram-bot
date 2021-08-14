@@ -3,6 +3,7 @@ import { isValidAddress } from '../address.js'
 import { backKeyboard, backButtonText, getMainKeyboard } from '../keyboards.js'
 import * as messages from '../messages.js'
 import { sendTransaction } from '../api.js'
+import { goMain } from '../utils.js'
 
 const { enter, leave } = Scenes.Stage
 const transferScene = new Scenes.BaseScene<Scenes.SceneContext>('transferScene')
@@ -41,7 +42,6 @@ transferScene.on('message', async (ctx: any) => {
             if (isValidAddress(to)) {
                 try {
                     const result = await sendTransaction(ctx.session.m, to, ammount)
-                    console.log(result)
                     ctx.replyWithMarkdown(messages.SEND_SUCCESS, backKeyboard)
                 }
                 catch (e) {
@@ -60,7 +60,7 @@ transferScene.on('message', async (ctx: any) => {
 transferScene.leave(async (ctx) => {
     ammount = null
     to = null
-    await ctx.reply(messages.WELCOME, getMainKeyboard(ctx))
+    await goMain(ctx)
     // ctx.deleteMessage()
 })
 

@@ -4,6 +4,7 @@ import * as messages from '../messages.js'
 import * as users from '../users.js'
 import { isValidAddress } from '../address.js'
 import { getReex } from '../api.js'
+import { goMain } from '../utils.js'
 
 const { leave } = Scenes.Stage
 const getReexScene = new Scenes.BaseScene<Scenes.SceneContext>('getReexScene')
@@ -23,7 +24,7 @@ getReexScene.enter(async (ctx) => {
 })
 
 getReexScene.leave(async (ctx) => {
-    await ctx.reply(messages.WELCOME, getMainKeyboard(ctx))
+    await goMain(ctx)
     // ctx.deleteMessage()
 })
 getReexScene.hears(backButtonText, leave<Scenes.SceneContext>())

@@ -3,6 +3,7 @@ import { backKeyboard, backButtonText, getMainKeyboard } from '../keyboards.js'
 import * as messages from '../messages.js'
 import { getBalance } from '../api.js'
 import { isValidAddress } from '../address.js'
+import { goMain } from '../utils.js'
 
 const { leave } = Scenes.Stage
 const getBalanceScene = new Scenes.BaseScene<Scenes.SceneContext>('getBalanceScene')
@@ -13,7 +14,7 @@ getBalanceScene.enter(async (ctx) => {
 })
 
 getBalanceScene.leave(async (ctx) => {
-    await ctx.reply(messages.WELCOME, getMainKeyboard(ctx))
+    await goMain(ctx)
     // ctx.deleteMessage()
 })
 getBalanceScene.hears(backButtonText, leave<Scenes.SceneContext>())
@@ -21,15 +22,15 @@ getBalanceScene.on('message', async (ctx: any) => {
     let address = ctx.message.text
 
     if (!isValidAddress(address)) {
-        ctx.reply(messages.NOT_ADDRESS)
+        ctx.replyWithMarkdown(messages.NOT_ADDRESS)
         return
     }
     const balance = await getBalance(address)
     if (balance !== null) {
-        ctx.reply('Баланс: ' + balance + 'reex')
+        ctx.replyWithMarkdown('✅ Баланс: ' + balance + ' REEX')
     }
     else {
-        ctx.reply(messages.ERROR_FETCH_BALANCE)
+        ctx.replyWithMarkdown(messages.ERROR_FETCH_BALANCE)
     }
 })
 

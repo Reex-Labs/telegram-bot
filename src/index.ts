@@ -4,8 +4,8 @@ import { getMainKeyboard, mainButtonText, backButtonText } from './keyboards.js'
 
 import * as messages from './messages.js'
 import * as users from './users.js'
+import { goMain } from './utils.js'
 
-import start from './scenes/start.js'
 import getReexScene from './scenes/getReexScene.js'
 import createWalletScene from './scenes/createWalletScene.js'
 import getBalanceScene from './scenes/getBalanceScene.js'
@@ -47,7 +47,7 @@ bot.use(session())
 bot.use(stage.middleware())
 
 bot.start((ctx) => {
-    ctx.replyWithMarkdown(messages.WELCOME, getMainKeyboard(ctx))
+    goMain(ctx)
 })
 
 bot.hears(mainButtonText.getReex, (ctx: any) => {
@@ -72,11 +72,12 @@ bot.hears(mainButtonText.auth, (ctx: any) => {
 
 bot.hears(mainButtonText.logout, (ctx: any) => {
     users.logout(ctx)
+    ctx.replyWithMarkdown(messages.AUTH_RESET, getMainKeyboard(ctx))
 })
 
-bot.action('back', ctx => ctx.replyWithMarkdown(messages.WELCOME, getMainKeyboard(ctx)))
+bot.action('back', ctx => goMain(ctx))
 
-bot.hears(backButtonText, (ctx) => ctx.replyWithMarkdown(messages.WELCOME, getMainKeyboard(ctx)))
+bot.hears(backButtonText, (ctx) => goMain(ctx))
 
 bot.on('message', (ctx: any) => {
     ctx.replyWithMarkdown('Вы вернулись главное меню. Выберите нужный раздел.', getMainKeyboard(ctx))
