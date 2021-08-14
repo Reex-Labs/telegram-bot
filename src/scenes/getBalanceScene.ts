@@ -10,7 +10,7 @@ const getBalanceScene = new Scenes.BaseScene<Scenes.SceneContext>('getBalanceSce
 
 getBalanceScene.enter(async (ctx) => {
     // await ctx.deleteMessage()
-    ctx.reply(messages.FETCH_BALANCE, backKeyboard)
+    ctx.replyWithMarkdown(messages.FETCH_BALANCE, backKeyboard)
 })
 
 getBalanceScene.leave(async (ctx) => {

@@ -1,5 +1,5 @@
 import { Scenes } from 'telegraf'
-import { backKeyboard, backButtonText, getMainKeyboard } from '../keyboards.js'
+import { backKeyboard, backButtonText } from '../keyboards.js'
 import * as messages from '../messages.js'
 import * as users from '../users.js'
 import { isValidAddress } from '../address.js'
@@ -11,7 +11,7 @@ const getReexScene = new Scenes.BaseScene<Scenes.SceneContext>('getReexScene')
 
 getReexScene.enter(async (ctx) => {
     // await ctx.deleteMessage()
-    await ctx.reply(messages.FAUCET_MESSAGE, backKeyboard)
+    await ctx.replyWithMarkdown(messages.FAUCET_MESSAGE, backKeyboard)
 
 
 //     const image = `iVBORw0KGgoAAAANSUhEUgA
@@ -58,7 +58,7 @@ getReexScene.on('message', async (ctx: any) => {
         }
     }
 
-    ctx.reply(message)
+    ctx.replyWithMarkdown(message)
 
 })
 

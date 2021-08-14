@@ -11,7 +11,7 @@ interface TgUser {
 type TgUserList = Record<string, TgUser>
 
 const userList: TgUserList = {}
-const LOCK_TIME = 10000
+const LOCK_TIME = 86400000
 
 /**
  * Add user to array

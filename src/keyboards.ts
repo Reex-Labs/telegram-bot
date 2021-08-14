@@ -55,3 +55,10 @@ export const mainInlineKeyboard = Markup.inlineKeyboard([
     //     Markup.button.callback('Отправить (скоро)', 'createWallet'),
     // ]
 ])
+
+export const inlineSendConfirm = Markup.inlineKeyboard([
+    [
+        Markup.button.callback('✅ Подтвердить перевод', 'confirm_send'),
+        Markup.button.callback('🚫 Отменить', 'abort_send'),
+    ],
+])
