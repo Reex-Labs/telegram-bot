@@ -4,7 +4,7 @@
   "description": "",
   "main": "dist/index.js",
   "scripts": {
-    "watch": "nodemon src/index.ts --exec 'node --loader ts-node src/index.ts'",
+    "watch": "nodemon -e ts --watch src --exec 'node --loader ts-node/esm src/index.ts'",
     "dev": "node dist/index.js",
     "tsc": "tsc",
     "start": "npm run tsc && npm run dev",

@@ -57,3 +57,9 @@ export function isLocked(id: string): boolean {
 export function isUser(id: string): boolean {
     return userList[String(id)] !== undefined
 }
+
+export function logout(ctx: any) {
+    ctx.session.state = null
+    ctx.session.m = null
+    ctx.session.pass = null
+}

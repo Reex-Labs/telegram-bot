@@ -1,5 +1,5 @@
 import { Scenes } from 'telegraf'
-import { backKeyboard, backButtonText, mainKeyboard } from '../keyboards.js'
+import { backKeyboard, backButtonText, getMainKeyboard } from '../keyboards.js'
 import * as messages from '../messages.js'
 import * as users from '../users.js'
 import { isValidAddress } from '../address.js'
@@ -9,7 +9,7 @@ const { leave } = Scenes.Stage
 const getReexScene = new Scenes.BaseScene<Scenes.SceneContext>('getReexScene')
 
 getReexScene.enter(async (ctx) => {
-    await ctx.deleteMessage()
+    // await ctx.deleteMessage()
     await ctx.reply(messages.FAUCET_MESSAGE, backKeyboard)
 
 
@@ -23,8 +23,8 @@ getReexScene.enter(async (ctx) => {
 })
 
 getReexScene.leave(async (ctx) => {
-    await ctx.reply(messages.WELCOME, mainKeyboard)
-    ctx.deleteMessage()
+    await ctx.reply(messages.WELCOME, getMainKeyboard(ctx))
+    // ctx.deleteMessage()
 })
 getReexScene.hears(backButtonText, leave<Scenes.SceneContext>())
 getReexScene.on('message', async (ctx: any) => {

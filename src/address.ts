@@ -11,3 +11,7 @@ export function isValidAddress(address: string) {
     var regex = /^reex\w{39}$/;
     return regex.test(address)
 }
+
+export function isValidMnemonic(mnemonic: string) {
+    return true
+}

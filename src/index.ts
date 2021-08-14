@@ -1,6 +1,6 @@
 import { Scenes, session, Telegraf } from 'telegraf'
 import * as dotenv from 'dotenv'
-import { mainKeyboard, mainButtonText, backButtonText } from './keyboards.js'
+import { getMainKeyboard, mainButtonText, backButtonText } from './keyboards.js'
 
 import * as messages from './messages.js'
 import * as users from './users.js'
@@ -10,19 +10,21 @@ import getReexScene from './scenes/getReexScene.js'
 import createWalletScene from './scenes/createWalletScene.js'
 import getBalanceScene from './scenes/getBalanceScene.js'
 import transferScene from './scenes/transferScene.js'
+import authScene from './scenes/authScene.js'
 
 const evnStatus = dotenv.config()
 if (evnStatus.error) throw evnStatus.error
 
 const bot = new Telegraf(process.env.BOT_TOKEN)
 
-bot.use(async (ctx, next) => {
-    const user = ctx.message.from
+bot.use(async (ctx: any, next) => {
+    if (ctx?.message) {
+        const user = ctx.message.from
 
-    if (user.is_bot) return
-
-    if (!users.isUser(String(user.id))) {
-        users.addUser(user)
+        if (user.is_bot) return
+        if (!users.isUser(String(user.id))) {
+            users.addUser(user)
+        }
     }
 
     const start = Date.now()
@@ -32,15 +34,20 @@ bot.use(async (ctx, next) => {
 })
 
 const { enter, leave } = Scenes.Stage
-const stage = new Scenes.Stage<Scenes.SceneContext>([start, getReexScene, createWalletScene, getBalanceScene, transferScene], {
-  ttl: 10,
+const stage = new Scenes.Stage<Scenes.SceneContext>([
+    getReexScene,
+    createWalletScene,
+    getBalanceScene,
+    transferScene,
+    authScene], {
+//   ttl: 10,
 })
 
 bot.use(session())
 bot.use(stage.middleware())
 
-bot.start(ctx => {
-    ctx.reply(messages.WELCOME, mainKeyboard)
+bot.start((ctx) => {
+    ctx.replyWithMarkdown(messages.WELCOME, getMainKeyboard(ctx))
 })
 
 bot.hears(mainButtonText.getReex, (ctx: any) => {
@@ -59,10 +66,26 @@ bot.hears(mainButtonText.transfer, (ctx: any) => {
     ctx.scene.enter('transferScene')
 })
 
-bot.hears(backButtonText, (ctx) => ctx.reply(messages.WELCOME, mainKeyboard))
+bot.hears(mainButtonText.auth, (ctx: any) => {
+    ctx.scene.enter('authScene')
+})
 
-bot.on('message', (ctx) => ctx.reply('Вы в главном меню. Выберите нужный раздел.', mainKeyboard))
+bot.hears(mainButtonText.logout, (ctx: any) => {
+    users.logout(ctx)
+})
+
+bot.action('back', ctx => ctx.replyWithMarkdown(messages.WELCOME, getMainKeyboard(ctx)))
+
+bot.hears(backButtonText, (ctx) => ctx.replyWithMarkdown(messages.WELCOME, getMainKeyboard(ctx)))
+
+bot.on('message', (ctx: any) => {
+    ctx.replyWithMarkdown('Вы вернулись главное меню. Выберите нужный раздел.', getMainKeyboard(ctx))
+})
 bot.help(ctx => ctx.reply(messages.HELP))
+bot.catch((error) => {
+    leave<Scenes.SceneContext>()
+    console.log('[BOT_ERROR]:', error)
+})
 bot.launch()
 
 process.once('SIGINT', () => bot.stop('SIGINT'))

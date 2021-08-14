@@ -1,5 +1,5 @@
 import { Scenes } from 'telegraf'
-import { backKeyboard, backButtonText, mainKeyboard } from '../keyboards.js'
+import { backKeyboard, backButtonText, getMainKeyboard } from '../keyboards.js'
 import * as messages from '../messages.js'
 import { getBalance } from '../api.js'
 import { isValidAddress } from '../address.js'
@@ -8,13 +8,13 @@ const { leave } = Scenes.Stage
 const getBalanceScene = new Scenes.BaseScene<Scenes.SceneContext>('getBalanceScene')
 
 getBalanceScene.enter(async (ctx) => {
-    await ctx.deleteMessage()
+    // await ctx.deleteMessage()
     ctx.reply(messages.FETCH_BALANCE, backKeyboard)
 })
 
 getBalanceScene.leave(async (ctx) => {
-    await ctx.reply(messages.WELCOME, mainKeyboard)
-    ctx.deleteMessage()
+    await ctx.reply(messages.WELCOME, getMainKeyboard(ctx))
+    // ctx.deleteMessage()
 })
 getBalanceScene.hears(backButtonText, leave<Scenes.SceneContext>())
 getBalanceScene.on('message', async (ctx: any) => {
