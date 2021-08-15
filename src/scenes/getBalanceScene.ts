@@ -9,13 +9,11 @@ const { leave } = Scenes.Stage
 const getBalanceScene = new Scenes.BaseScene<Scenes.SceneContext>('getBalanceScene')
 
 getBalanceScene.enter(async (ctx) => {
-    // await ctx.deleteMessage()
     ctx.replyWithMarkdown(messages.FETCH_BALANCE, backKeyboard)
 })
 
 getBalanceScene.leave(async (ctx) => {
     await goMain(ctx)
-    // ctx.deleteMessage()
 })
 getBalanceScene.hears(backButtonText, leave<Scenes.SceneContext>())
 getBalanceScene.on('message', async (ctx: any) => {

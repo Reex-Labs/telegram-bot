@@ -1,4 +1,5 @@
 import { DirectSecp256k1HdWallet } from "@cosmjs/proto-signing";
+import { Bip39, EnglishMnemonic } from "@cosmjs/crypto";
 
 export async function genAddress() {
     const wallet = await DirectSecp256k1HdWallet.generate(24, { prefix: "reex" })
@@ -13,5 +14,11 @@ export function isValidAddress(address: string) {
 }
 
 export function isValidMnemonic(mnemonic: string) {
-    return true
+    try {
+        new EnglishMnemonic(mnemonic)
+        return true
+    }
+    catch (e) {
+        return false
+    }
 }

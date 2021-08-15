@@ -3,7 +3,8 @@ import { isValidAddress } from '../address.js'
 import { backKeyboard, backButtonText, inlineSendConfirm } from '../keyboards.js'
 import * as messages from '../messages.js'
 import { sendTransaction } from '../api.js'
-import { goMain } from '../utils.js'
+import { goMain, parseFloatWithComma } from '../utils.js'
+import { isValidAmount } from '../reex.js'
 
 const { enter, leave } = Scenes.Stage
 const transferScene = new Scenes.BaseScene<Scenes.SceneContext>('transferScene')
@@ -25,13 +26,14 @@ transferScene.hears(backButtonText, leave<Scenes.SceneContext>())
 
 transferScene.on('message', async (ctx: any) => {
     if (!amount) {
-        const number = Number(ctx.message.text)
-        if (number > 0 && number < 1000000000000) {
+        const number = parseFloatWithComma(ctx.message.text)
+
+        if (isValidAmount(number)) {
             amount = String(number)
             ctx.replyWithMarkdown(messages.SEND_REEX_ADDRESS, backKeyboard)
         }
         else {
-            ctx.replyWithMarkdown('С цифрой что-то не так: либо это не цифра, либо она больше миллиона. Введите еще раз.', backKeyboard)
+            ctx.replyWithMarkdown('С цифрой что-то не так: либо это не цифра, либо она меньше 0.000001. Введите еще раз.', backKeyboard)
         }
         return
     }

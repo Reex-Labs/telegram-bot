@@ -9,42 +9,29 @@ const { leave } = Scenes.Stage
 const authScene = new Scenes.BaseScene<Scenes.SceneContext>('authScene')
 
 authScene.enter(async (ctx) => {
-    // await ctx.deleteMessage()
-
     ctx.replyWithMarkdown(messages.AUTH_ENTER, backKeyboard)
 })
 
 authScene.hears(backButtonText, leave<Scenes.SceneContext>())
 
 authScene.on('message', async (ctx: any) => {
-    // if (!ctx.session.m) {
-        const mnemonic = ctx.message.text
-        await ctx.deleteMessage()
-        if (isValidMnemonic(mnemonic)) {
-            ctx.session.m = mnemonic
+    const mnemonic = ctx.message.text
+    await ctx.deleteMessage()
+    if (isValidMnemonic(mnemonic)) {
+        ctx.session.m = mnemonic
 
-            // ToDo: Удалить, если используется пароль
-            ctx.session.state = true
-            ctx.replyWithMarkdown(messages.AUTH_SUCCESS, backKeyboard)
-            
-            // ctx.replyWithMarkdown('Теперь задайте какой-нибудь пароль. Это дополнительно защитит вас.', backKeyboard)
-        }
-        else {
-            ctx.replyWithMarkdown(
-                'Похоже вы где-то ошиблись. Или кол-во слов неверно, или присутствуют грамматические ошибки. Попробуйте еще раз.', backKeyboard
-            )
-        }
-    // }
-    // else {
-    //     ctx.session.pass = ctx.message.text
-        // ctx.session.state = true
-        // await ctx.deleteMessage()
-        // ctx.replyWithMarkdown(messages.AUTH_SUCCESS, backKeyboard)
-    // }
+        // ToDo: Удалить, если используется пароль
+        ctx.session.state = true
+        ctx.replyWithMarkdown(messages.AUTH_SUCCESS, backKeyboard)
+        
+        // ctx.replyWithMarkdown('Теперь задайте какой-нибудь пароль. Это дополнительно защитит вас.', backKeyboard)
+    }
+    else {
+        ctx.replyWithMarkdown(messages.AUTH_FAIL, backKeyboard)
+    }
 })
 
 authScene.leave(async (ctx: any) => {
-    // await ctx.deleteMessage()
     if (!ctx.session.state) {
         logout(ctx)
     }

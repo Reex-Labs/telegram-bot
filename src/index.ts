@@ -4,7 +4,7 @@ import { getMainKeyboard, mainButtonText, backButtonText } from './keyboards.js'
 
 import * as messages from './messages.js'
 import * as users from './users.js'
-import { goMain } from './utils.js'
+import { goMain, parseFloatWithComma } from './utils.js'
 
 import getReexScene from './scenes/getReexScene.js'
 import createWalletScene from './scenes/createWalletScene.js'
@@ -80,6 +80,7 @@ bot.action('back', ctx => goMain(ctx))
 bot.hears(backButtonText, (ctx) => goMain(ctx))
 
 bot.on('message', (ctx: any) => {
+    const mess = ctx.message.text
     ctx.replyWithMarkdown('Вы вернулись главное меню. Выберите нужный раздел.', getMainKeyboard(ctx))
 })
 bot.help(ctx => ctx.reply(messages.HELP))

@@ -32,7 +32,7 @@ export function lockUser(id: string) {
     userList[String(id)].t = Date.now()
 }
 
-export function getTimeLeft(id: string): number {
+export function getTimeLeftInMs(id: string): number {
     return userList[String(id)].t + LOCK_TIME - Date.now()
 }
 

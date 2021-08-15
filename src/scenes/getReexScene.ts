@@ -4,28 +4,23 @@ import * as messages from '../messages.js'
 import * as users from '../users.js'
 import { isValidAddress } from '../address.js'
 import { getReex } from '../api.js'
-import { goMain } from '../utils.js'
+import { goMain, timeLeft } from '../utils.js'
+import Captcha from '../captcha.js'
+
+let generatedCaptchaText: string
+let address: string
 
 const { leave } = Scenes.Stage
 const getReexScene = new Scenes.BaseScene<Scenes.SceneContext>('getReexScene')
 
 getReexScene.enter(async (ctx) => {
-    // await ctx.deleteMessage()
     await ctx.replyWithMarkdown(messages.FAUCET_MESSAGE, backKeyboard)
-
-
-//     const image = `iVBORw0KGgoAAAANSUhEUgA
-// AAAoAAAAKCAYAAACNMs+9AAAABmJLR0QA/wD/AP+gvaeTAAAAB3RJ
-// TUUH1ggDCwMADQ4NnwAAAFVJREFUGJWNkMEJADEIBEcbSDkXUnfSg
-// nBVeZ8LSAjiwjyEQXSFEIcHGP9oAi+H0Bymgx9MhxbFdZE2a0s9kT
-// Zdw01ZhhYkABSwgmf1Z6r1SNyfFf4BZ+ZUExcNUQUAAAAASUVORK5
-// CYII=`
-//     ctx.replyWithPhoto({ source: Buffer.from(image, 'base64') })
 })
 
 getReexScene.leave(async (ctx) => {
     await goMain(ctx)
-    // ctx.deleteMessage()
+    generatedCaptchaText = null
+    address = null
 })
 getReexScene.hears(backButtonText, leave<Scenes.SceneContext>())
 getReexScene.on('message', async (ctx: any) => {
@@ -33,33 +28,61 @@ getReexScene.on('message', async (ctx: any) => {
     if (user.is_bot) return
     if (!users.isUser(String(user.id))) return
 
-    let message = ''
     const text = ctx.message.text
 
-    console.log('faucet to address', text)
-
     if (users.isLocked(String(user.id))) {
-        message = messages.TIMELEFT + users.getTimeLeft(String(user.id))
+        const timeLeftInMs = users.getTimeLeftInMs(String(user.id))
+        const timeLeftFull = timeLeft(timeLeftInMs)
+        const timeLeftText = `${timeLeftFull.hours}:${timeLeftFull.minutes}:${timeLeftFull.seconds} часов.`
+        const message = messages.TIMELEFT + timeLeftText
+        ctx.replyWithMarkdown(message)
+        return
     }
-    else {
+
+    if (!address) {
         if (isValidAddress(text)) {
-            const result = await getReex(text)
-            if (result) {
-                users.lockUser(String(user.id))
-                message = messages.SUCCESS
-            }
-            else {
-                message = messages.NOT_SUCCESS
-            }
+            address = text
         }
         else {
             console.log('address invalid', text)
-            message = messages.NOT_ADDRESS
+            ctx.replyWithMarkdown(messages.NOT_ADDRESS)
+            return
         }
     }
 
-    ctx.replyWithMarkdown(message)
+    if (!generatedCaptchaText) {
+        ctx.replyWithMarkdown(messages.NEED_CAPTCHA)
+        generatedCaptchaText = generateCaptcha(ctx)
+        return
+    }
+    else {
+        const captcha = text.substring(0, 6)
+        if (generatedCaptchaText !== captcha) {
+            ctx.replyWithMarkdown(messages.WRONG_CAPTCHA)
+            generatedCaptchaText = generateCaptcha(ctx)
+            return
+        }
+    }
 
+    const result = await getReex(address)
+    if (result) {
+        users.lockUser(String(user.id))
+        ctx.replyWithMarkdown(messages.SUCCESS)
+        console.log('faucet to address', address)
+    }
+    else {
+        ctx.replyWithMarkdown(messages.NOT_SUCCESS)
+        console.log('not faucet to address', address)
+    }
+
+    generatedCaptchaText = null
+    address = null
 })
 
 export default getReexScene;
+
+function generateCaptcha(ctx: any) {
+    const captcha = new Captcha()
+    ctx.replyWithPhoto({ source: captcha.image })
+    return captcha.text
+}
