@@ -4,6 +4,7 @@ import * as messages from '../messages.js'
 import { isValidMnemonic } from '../address.js'
 import { logout } from '../users.js'
 import { goMain } from '../utils.js'
+import { DirectSecp256k1HdWallet } from '@cosmjs/proto-signing'
 
 const { leave } = Scenes.Stage
 const authScene = new Scenes.BaseScene<Scenes.SceneContext>('authScene')
@@ -19,6 +20,10 @@ authScene.on('message', async (ctx: any) => {
     await ctx.deleteMessage()
     if (isValidMnemonic(mnemonic)) {
         ctx.session.m = mnemonic
+
+        const wallet = await DirectSecp256k1HdWallet.fromMnemonic(mnemonic, { prefix: 'reex' })
+        const [{ address }] = await wallet.getAccounts();
+        ctx.session.a = address;
 
         // ToDo: Удалить, если используется пароль
         ctx.session.state = true

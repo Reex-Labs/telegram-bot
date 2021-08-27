@@ -66,6 +66,10 @@ bot.hears(mainButtonText.transfer, (ctx: any) => {
     ctx.scene.enter('transferScene')
 })
 
+bot.hears(mainButtonText.myAddress, (ctx: any) => {
+    ctx.replyWithMarkdown(messages.YOUR_AUTH_ADDRESS + ctx.session.a, getMainKeyboard(ctx));
+});
+
 bot.hears(mainButtonText.auth, (ctx: any) => {
     ctx.scene.enter('authScene')
 })
