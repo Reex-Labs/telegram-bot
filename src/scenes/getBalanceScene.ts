@@ -45,6 +45,11 @@ getBalanceScene.action("get_other_balance", (ctx) =>
   ctx.replyWithMarkdown(messages.FETCH_BALANCE, backKeyboard)
 );
 
+getBalanceScene.command("start", (ctx) => {
+  leave<Scenes.SceneContext>();
+  goMain(ctx);
+});
+
 async function getBalanceOnScene(ctx: any, address: string) {
   const balance = await getBalance(address);
   if (balance !== null) {
